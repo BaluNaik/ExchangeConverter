@@ -35,6 +35,14 @@
 		A5A215AE2981221F008A469B /* HomeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215AD2981221F008A469B /* HomeInteractor.swift */; };
 		A5A215B02981494F008A469B /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215AF2981494F008A469B /* HomePresenter.swift */; };
 		A5A215B229814A56008A469B /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215B129814A56008A469B /* HomeRouter.swift */; };
+		A5A215B92982403D008A469B /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215B82982403D008A469B /* UITextField+Extension.swift */; };
+		A5A215BB298240A7008A469B /* CurrencyPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215BA298240A7008A469B /* CurrencyPickerView.swift */; };
+		A5A215BD2982A40C008A469B /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215BC2982A40C008A469B /* UIButton+Extension.swift */; };
+		A5A215BF2982A620008A469B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215BE2982A620008A469B /* UIColor+Extension.swift */; };
+		A5A215C12982E02A008A469B /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C02982E02A008A469B /* APIError.swift */; };
+		A5A215C42982E2AF008A469B /* DataManagerInputProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */; };
+		A5A215C72982E490008A469B /* CurrencyAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C62982E490008A469B /* CurrencyAPIModel.swift */; };
+		A5A215C92982F4AF008A469B /* HomeConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C82982F4AF008A469B /* HomeConnector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +87,14 @@
 		A5A215AD2981221F008A469B /* HomeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractor.swift; sourceTree = "<group>"; };
 		A5A215AF2981494F008A469B /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
 		A5A215B129814A56008A469B /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
+		A5A215B82982403D008A469B /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		A5A215BA298240A7008A469B /* CurrencyPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerView.swift; sourceTree = "<group>"; };
+		A5A215BC2982A40C008A469B /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		A5A215BE2982A620008A469B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		A5A215C02982E02A008A469B /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerInputProtocol.swift; sourceTree = "<group>"; };
+		A5A215C62982E490008A469B /* CurrencyAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyAPIModel.swift; sourceTree = "<group>"; };
+		A5A215C82982F4AF008A469B /* HomeConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConnector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +152,9 @@
 				A5A15E8F2980297E0016702F /* Application */,
 				A5A15E9629802A090016702F /* Modules */,
 				A5A15EBB298047940016702F /* Services */,
+				A5A215C52982E42D008A469B /* DataModel */,
 				A5A15EB3298047020016702F /* UI */,
+				A5A215B529823F8B008A469B /* Utils */,
 			);
 			path = ExchangeConverter;
 			sourceTree = "<group>";
@@ -244,6 +262,9 @@
 		A5A15EBB298047940016702F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A5A215C22982E28D008A469B /* DataManager */,
+				A5A215B429823E1C008A469B /* Local */,
+				A5A215B329823E16008A469B /* API */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -254,6 +275,65 @@
 				A5A215B129814A56008A469B /* HomeRouter.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		A5A215B329823E16008A469B /* API */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215C82982F4AF008A469B /* HomeConnector.swift */,
+				A5A215C02982E02A008A469B /* APIError.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		A5A215B429823E1C008A469B /* Local */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		A5A215B529823F8B008A469B /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215B729823FA0008A469B /* CustomView */,
+				A5A215B629823F95008A469B /* Extensions */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A5A215B629823F95008A469B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215B82982403D008A469B /* UITextField+Extension.swift */,
+				A5A215BC2982A40C008A469B /* UIButton+Extension.swift */,
+				A5A215BE2982A620008A469B /* UIColor+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A5A215B729823FA0008A469B /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215BA298240A7008A469B /* CurrencyPickerView.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		A5A215C22982E28D008A469B /* DataManager */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */,
+			);
+			path = DataManager;
+			sourceTree = "<group>";
+		};
+		A5A215C52982E42D008A469B /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				A5A215C62982E490008A469B /* CurrencyAPIModel.swift */,
+			);
+			path = DataModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -387,13 +467,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5A215C72982E490008A469B /* CurrencyAPIModel.swift in Sources */,
+				A5A215B92982403D008A469B /* UITextField+Extension.swift in Sources */,
 				A5A15E9C29802BA30016702F /* BaseViewController.swift in Sources */,
 				A5765645297EDBA100FEDC5A /* ExchangeConverter.xcdatamodeld in Sources */,
+				A5A215BF2982A620008A469B /* UIColor+Extension.swift in Sources */,
+				A5A215BD2982A40C008A469B /* UIButton+Extension.swift in Sources */,
 				A5A215A929804DB7008A469B /* HomeAssembly.swift in Sources */,
 				A5A215AE2981221F008A469B /* HomeInteractor.swift in Sources */,
 				A5A15E9929802A350016702F /* RootWireframeInterface.swift in Sources */,
+				A5A215C12982E02A008A469B /* APIError.swift in Sources */,
+				A5A215C92982F4AF008A469B /* HomeConnector.swift in Sources */,
 				A5A15EA229803CA60016702F /* BaseModulePresenter.swift in Sources */,
+				A5A215BB298240A7008A469B /* CurrencyPickerView.swift in Sources */,
 				A5A15EA82980459F0016702F /* BaseModuleRouter.swift in Sources */,
+				A5A215C42982E2AF008A469B /* DataManagerInputProtocol.swift in Sources */,
 				A5A15EB9298047600016702F /* HomeViewController.swift in Sources */,
 				A576563B297EDBA100FEDC5A /* AppDelegate.swift in Sources */,
 				A5A215B229814A56008A469B /* HomeRouter.swift in Sources */,

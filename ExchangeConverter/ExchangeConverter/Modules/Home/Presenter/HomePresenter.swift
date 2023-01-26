@@ -8,7 +8,8 @@
 import Foundation
 
 protocol HomePresenterInput: BaseModulePresenterInput {
-    
+    func getCurrencyList(for base: String?, completion:@escaping (_ status: Bool) -> ())
+    func getCurrencyCodes(for type: CurrentTextField) -> [String]
 }
 
 protocol HomePresenterOutput: BaseModulePresenterOutput {
@@ -47,5 +48,14 @@ extension HomePresenter: HomeInteractorOutput {
 }
 
 extension HomePresenter: HomePresenterInput {
+    
+    func getCurrencyList(for base: String?, completion:@escaping (_ status: Bool) -> ()) {
+        self.interactor?.getCurrencyList(for: base, completion: completion)
+    }
+    
+    func getCurrencyCodes(for type: CurrentTextField) -> [String] {
+        
+        return self.interactor?.getCurrencyCodes(for: type) ?? []
+    }
     
 }
