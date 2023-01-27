@@ -40,9 +40,15 @@
 		A5A215BD2982A40C008A469B /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215BC2982A40C008A469B /* UIButton+Extension.swift */; };
 		A5A215BF2982A620008A469B /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215BE2982A620008A469B /* UIColor+Extension.swift */; };
 		A5A215C12982E02A008A469B /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C02982E02A008A469B /* APIError.swift */; };
-		A5A215C42982E2AF008A469B /* DataManagerInputProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */; };
 		A5A215C72982E490008A469B /* CurrencyAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C62982E490008A469B /* CurrencyAPIModel.swift */; };
 		A5A215C92982F4AF008A469B /* HomeConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A215C82982F4AF008A469B /* HomeConnector.swift */; };
+		A5E16AFD2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16AF92983DC8A0082E4D2 /* RateCoreDataModel+CoreDataClass.swift */; };
+		A5E16AFE2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16AFA2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataProperties.swift */; };
+		A5E16AFF2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16AFB2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataClass.swift */; };
+		A5E16B002983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16AFC2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataProperties.swift */; };
+		A5E16B02298400A90082E4D2 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B01298400A90082E4D2 /* CoreDataManager.swift */; };
+		A5E16B04298425E70082E4D2 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B03298425E70082E4D2 /* ActivityIndicator.swift */; };
+		A5E16B06298429260082E4D2 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B05298429260082E4D2 /* UIView+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,9 +98,15 @@
 		A5A215BC2982A40C008A469B /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		A5A215BE2982A620008A469B /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		A5A215C02982E02A008A469B /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
-		A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerInputProtocol.swift; sourceTree = "<group>"; };
 		A5A215C62982E490008A469B /* CurrencyAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyAPIModel.swift; sourceTree = "<group>"; };
 		A5A215C82982F4AF008A469B /* HomeConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeConnector.swift; sourceTree = "<group>"; };
+		A5E16AF92983DC8A0082E4D2 /* RateCoreDataModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RateCoreDataModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A5E16AFA2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RateCoreDataModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A5E16AFB2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseCoreDataModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A5E16AFC2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseCoreDataModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A5E16B01298400A90082E4D2 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		A5E16B03298425E70082E4D2 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		A5E16B05298429260082E4D2 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,7 +274,7 @@
 		A5A15EBB298047940016702F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A5A215C22982E28D008A469B /* DataManager */,
+				A5A215C22982E28D008A469B /* CoreDataManager */,
 				A5A215B429823E1C008A469B /* Local */,
 				A5A215B329823E16008A469B /* API */,
 			);
@@ -308,6 +320,7 @@
 				A5A215B82982403D008A469B /* UITextField+Extension.swift */,
 				A5A215BC2982A40C008A469B /* UIButton+Extension.swift */,
 				A5A215BE2982A620008A469B /* UIColor+Extension.swift */,
+				A5E16B05298429260082E4D2 /* UIView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -316,24 +329,37 @@
 			isa = PBXGroup;
 			children = (
 				A5A215BA298240A7008A469B /* CurrencyPickerView.swift */,
+				A5E16B03298425E70082E4D2 /* ActivityIndicator.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
 		};
-		A5A215C22982E28D008A469B /* DataManager */ = {
+		A5A215C22982E28D008A469B /* CoreDataManager */ = {
 			isa = PBXGroup;
 			children = (
-				A5A215C32982E2AF008A469B /* DataManagerInputProtocol.swift */,
+				A5E16B01298400A90082E4D2 /* CoreDataManager.swift */,
 			);
-			path = DataManager;
+			path = CoreDataManager;
 			sourceTree = "<group>";
 		};
 		A5A215C52982E42D008A469B /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				A5A215D82983D2FB008A469B /* CoreData */,
 				A5A215C62982E490008A469B /* CurrencyAPIModel.swift */,
 			);
 			path = DataModel;
+			sourceTree = "<group>";
+		};
+		A5A215D82983D2FB008A469B /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				A5E16AFB2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataClass.swift */,
+				A5E16AFC2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataProperties.swift */,
+				A5E16AF92983DC8A0082E4D2 /* RateCoreDataModel+CoreDataClass.swift */,
+				A5E16AFA2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataProperties.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -469,6 +495,7 @@
 			files = (
 				A5A215C72982E490008A469B /* CurrencyAPIModel.swift in Sources */,
 				A5A215B92982403D008A469B /* UITextField+Extension.swift in Sources */,
+				A5E16AFD2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataClass.swift in Sources */,
 				A5A15E9C29802BA30016702F /* BaseViewController.swift in Sources */,
 				A5765645297EDBA100FEDC5A /* ExchangeConverter.xcdatamodeld in Sources */,
 				A5A215BF2982A620008A469B /* UIColor+Extension.swift in Sources */,
@@ -480,11 +507,16 @@
 				A5A215C92982F4AF008A469B /* HomeConnector.swift in Sources */,
 				A5A15EA229803CA60016702F /* BaseModulePresenter.swift in Sources */,
 				A5A215BB298240A7008A469B /* CurrencyPickerView.swift in Sources */,
+				A5E16B002983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataProperties.swift in Sources */,
 				A5A15EA82980459F0016702F /* BaseModuleRouter.swift in Sources */,
-				A5A215C42982E2AF008A469B /* DataManagerInputProtocol.swift in Sources */,
+				A5E16B04298425E70082E4D2 /* ActivityIndicator.swift in Sources */,
+				A5E16AFE2983DC8A0082E4D2 /* RateCoreDataModel+CoreDataProperties.swift in Sources */,
 				A5A15EB9298047600016702F /* HomeViewController.swift in Sources */,
 				A576563B297EDBA100FEDC5A /* AppDelegate.swift in Sources */,
 				A5A215B229814A56008A469B /* HomeRouter.swift in Sources */,
+				A5E16B02298400A90082E4D2 /* CoreDataManager.swift in Sources */,
+				A5E16B06298429260082E4D2 /* UIView+Extension.swift in Sources */,
+				A5E16AFF2983DC8A0082E4D2 /* BaseCoreDataModel+CoreDataClass.swift in Sources */,
 				A5A215B02981494F008A469B /* HomePresenter.swift in Sources */,
 				A5A15E9F29803BB10016702F /* BaseModuleInteractor.swift in Sources */,
 				A5A15EAB298045E30016702F /* ModuleTransition.swift in Sources */,

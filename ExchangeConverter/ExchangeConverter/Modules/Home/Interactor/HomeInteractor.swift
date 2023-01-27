@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrencyModel {
+struct CurrencyViewModel {
     var base: String
     var timestamp: Double
     var rates: [String: Double] = [:]
@@ -15,31 +15,26 @@ struct CurrencyModel {
 
 
 protocol HomeInteractorInput: BaseModuleInteractorInput {
-    func getCurrencyList(for base: String?, completion:@escaping (_ status: Bool) -> ())
+    var currentBase: String? { get }
+    
+    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ())
     func calculateAmount(amount: Int, currency: String) -> (from: String, to: String)
     func getCurrencyCodes(for type: CurrentTextField) -> [String]
 }
 
-protocol HomeInteractorOutput: BaseModuleInteractorOutput {
-    
-}
+protocol HomeInteractorOutput: BaseModuleInteractorOutput { }
 
 
 protocol HomeInteractorInterface: BaseModuleInteractor {
     
-    var currency: CurrencyModel? { set get }
-//    var feedService: NewsFeedService! { set get }
-//    var postService: PostService! { set get }
-//
-//    init(feedService: NewsFeedService, postService: PostService)
-    //func getCurrencyRate(for currency: String, completion:@escaping (Result<CurrencyModel,Error>) -> ())
+    var currency: CurrencyViewModel? { set get }
 }
 
 class HomeInteractor: HomeInteractorInterface {
     
     typealias Presenter = HomeInteractorOutput
     weak var presenter: Presenter?
-    var currency: CurrencyModel?
+    var currency: CurrencyViewModel?
     private var connector: HomeConnectorInterface?
     
     required init(presenter: Presenter) {
@@ -50,8 +45,11 @@ class HomeInteractor: HomeInteractorInterface {
 }
 
 extension HomeInteractor: HomeInteractorInput {
+    var currentBase: String? {
+        return currency?.base
+    }
     
-    func getCurrencyList(for base: String?, completion:@escaping (_ status: Bool) -> ()) {
+    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ()) {
         /*
           * Check local storage availability
           * If local storage not expired
@@ -62,9 +60,9 @@ extension HomeInteractor: HomeInteractorInput {
             switch result {
             case .success(let success):
                 self?.transform(success)
-                completion(true)
+                completion(nil)
             case .failure(let failure):
-                completion(false)
+                completion(failure.localizedDescription)
             }
         })
     }
@@ -92,8 +90,10 @@ extension HomeInteractor: HomeInteractorInput {
     }
     
     func calculateAmount(amount: Int, currency: String) -> (from: String, to: String) {
+        let rate = self.currency?.rates[currency] ?? 0.0
         
-        return ("100.00 USD", "1500 AED")
+        
+        return ("\(amount) \(self.currentBase ?? "")", "\(rate * Double(amount)) \(currency)")
     }
 }
 
@@ -106,7 +106,7 @@ private extension HomeInteractor {
         if let baseCode = response.base,
            let timeStamp = response.timestamp,
            let rates = response.rates {
-            self.currency = CurrencyModel(base: baseCode, timestamp: timeStamp, rates: rates)
+            self.currency = CurrencyViewModel(base: baseCode, timestamp: timeStamp, rates: rates)
         }
     }
     

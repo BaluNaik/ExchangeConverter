@@ -13,6 +13,7 @@ enum APIError: Error, CustomStringConvertible {
     case url(URLError?)
     case parsing(DecodingError?)
     case unknown
+    case storageError
     
     var description: String {
         switch self {
@@ -24,6 +25,7 @@ enum APIError: Error, CustomStringConvertible {
             return "Parsing error \(error?.localizedDescription ?? "")"
         case .badResponse(statusCode: let statusCode):
             return "Bad response with status code \(statusCode)"
+        case .storageError: return "Error in storing value"
         }
     }
     
@@ -33,6 +35,8 @@ enum APIError: Error, CustomStringConvertible {
             return "Sorry, something went wrong."
         case .badResponse(_):
             return "Sorry, the connection to our server failed."
+        case .storageError:
+            return "Sorry, something went wrong."
         case .url(let error):
             return error?.localizedDescription ?? "Something went wrong."
         }

@@ -13,6 +13,27 @@ public protocol BaseModuleInterface {
     associatedtype Presenter
 }
 
+class BaseViewController: UIViewController {
+    
+    lazy var activityIndicator: ActivityIndicator = {
+        let indicator = ActivityIndicator()
+        self.view.addAndCenterSubview(indicator)
+        self.view.bringSubviewToFront(indicator)
+        
+        return indicator
+    }()
+    
+    func showLoadIndicator(_ show: Bool) {
+        self.view.isUserInteractionEnabled = !show
+        if show {
+            self.activityIndicator.startAnimating()
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+    
+}
+
 extension UIViewController: ModuleTransition {
     
     func pushModuleInterface(controller: UIViewController, animated: Bool) {
@@ -37,6 +58,12 @@ extension UIViewController: ModuleTransition {
     
     func popToRootInterface(animated: Bool) {
         self.navigationController?.popToRootViewController(animated: animated)
+    }
+    
+    func showOkAlert(errorMsg: String) {
+        let alerVc = UIAlertController(title: "Alert!!", message: errorMsg, preferredStyle: .alert)
+        alerVc.addAction(UIAlertAction(title: "Ok", style: .default))
+        self.present(alerVc, animated: true)
     }
 }
 

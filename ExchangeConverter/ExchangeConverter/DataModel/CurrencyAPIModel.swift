@@ -19,6 +19,11 @@ struct CurrencyAPIModel: Codable {
         case rates = "conversion_rates"
     }
     
+    init(base: String, timestamp: Double) {
+        self.base = base
+        self.timestamp = timestamp
+    }
+    
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         if let baseCode = try values.decodeIfPresent(String.self, forKey: .base) {

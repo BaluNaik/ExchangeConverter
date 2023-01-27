@@ -14,7 +14,7 @@ enum CurrentTextField: Int {
     case amount
 }
 
-class HomeViewController: UIViewController, BaseModuleInterface {
+class HomeViewController: BaseViewController, BaseModuleInterface {
     
     typealias Presenter = HomePresenterInput
     var presenter: Presenter?
@@ -52,32 +52,56 @@ class HomeViewController: UIViewController, BaseModuleInterface {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.presenter?.getCurrencyList(for: nil, completion: { status in
-            if status {
-                DispatchQueue.main.async {
-                    self.sourceTextField.text = "USD"
+        super.viewWillAppear(animated)
+        self.eventLoadData(for: "USD")
+    }
+    
+    func salutations_onSelect(selectedText: String) {
+        if self.activeTextField == .source,
+           let base = self.presenter?.currentBase, selectedText != base {
+            self.eventLoadData(for: selectedText)
+            self.destinationTextField.text = ""
+        }
+    }
+    
+    func eventLoadData(for source: String) {
+        self.showLoadIndicator(true)
+        self.presenter?.getCurrencyList(for: source, completion: {[weak self] errorMsg in
+            DispatchQueue.main.async {
+                self?.showLoadIndicator(false)
+                if errorMsg == nil {
+                    self?.sourceTextField.text = source
+                } else {
+                    self?.showOkAlert(errorMsg: errorMsg ?? "")
                 }
             }
         })
     }
     
-    func salutations_onSelect(selectedText: String) {
-        if selectedText == "" {
-            print("Hello World")
-        } else if selectedText == "Mr." {
-            print("Hello Sir")
+    func validateAmount() {
+        if let text = amountTextField.text,
+           let value = Int(text), value > 0 {
+            calcButton.setEnabled(enable: true)
         } else {
-            print("Hello Madame")
+            calcButton.setEnabled(enable: false)
         }
     }
+    
     
     // MARK: - Action
     
     @objc func doneClick() {
         amountTextField.resignFirstResponder()
+        validateAmount()
      }
     @objc func cancelClick() {
         amountTextField.resignFirstResponder()
+        validateAmount()
+    }
+    
+    @IBAction func calculatedAmount() {
+        let result = self.presenter?.calculateAmount(amount: Int(amountTextField.text!)! , currency: self.destinationTextField.text!)
+        self.showOkAlert(errorMsg:"\(result!.0) \(result!.1)")
     }
 
 }
@@ -101,6 +125,5 @@ extension HomeViewController: UITextFieldDelegate {
             self.activeTextField = .amount
         }
     }
-    
     
 }
