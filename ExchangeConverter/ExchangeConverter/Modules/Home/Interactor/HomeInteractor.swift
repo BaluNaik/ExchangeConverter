@@ -7,30 +7,24 @@
 
 import Foundation
 
-struct CurrencyViewModel {
-    var base: String
-    var timestamp: Double
-    var rates: [String: Double] = [:]
-}
-
-
 protocol HomeInteractorInput: BaseModuleInteractorInput {
     var currentBase: String? { get }
+    var currency: CurrencyViewModel? { set get }
     
-    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ())
-    func calculateAmount(amount: Int, currency: String) -> (from: String, to: String)
     func getCurrencyCodes(for type: CurrentTextField) -> [String]
+    
+    func eventLoadData(for base: String?,
+                         completion:@escaping (_ errorMsg: String?) -> ())
+    
+    func getTransferDetails(for currency: String, completion:@escaping (RateViewModel, RateViewModel?) -> ())
 }
 
 protocol HomeInteractorOutput: BaseModuleInteractorOutput { }
 
 
-protocol HomeInteractorInterface: BaseModuleInteractor {
-    
-    var currency: CurrencyViewModel? { set get }
-}
+// MARK: - HomeInteractor
 
-class HomeInteractor: HomeInteractorInterface {
+class HomeInteractor: BaseModuleInteractor {
     
     typealias Presenter = HomeInteractorOutput
     weak var presenter: Presenter?
@@ -44,12 +38,16 @@ class HomeInteractor: HomeInteractorInterface {
     
 }
 
+
+// MARK: - HomeInteractorInput
+
 extension HomeInteractor: HomeInteractorInput {
+    
     var currentBase: String? {
         return currency?.base
     }
     
-    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ()) {
+    func eventLoadData(for base: String?, completion: @escaping (String?) -> ()) {
         /*
           * Check local storage availability
           * If local storage not expired
@@ -72,7 +70,6 @@ extension HomeInteractor: HomeInteractorInput {
            let allKeys = currency?.rates.keys {
             var keys = [String]()
             keys.append(contentsOf: allKeys)
-            
             return keys.sorted()
         } else if type == .destination,
                   let allKeys = currency?.rates.keys {
@@ -81,24 +78,24 @@ extension HomeInteractor: HomeInteractorInput {
             if let index = keys.firstIndex(of: self.currency?.base ?? "") {
                 keys.remove(at: index)
             }
-            
             return keys.sorted()
-            
         }
-        
         return []
     }
     
-    func calculateAmount(amount: Int, currency: String) -> (from: String, to: String) {
-        let rate = self.currency?.rates[currency] ?? 0.0
-        
-        
-        return ("\(amount) \(self.currentBase ?? "")", "\(rate * Double(amount)) \(currency)")
+    func getTransferDetails(for currency: String, completion:@escaping (RateViewModel, RateViewModel?) -> ()) {
+        let base = RateViewModel(key: currentBase ?? "USD", rate: 1.0)
+        if let transferRate = self.currency?.rates[currency], transferRate > 0.0 {
+            let destination = RateViewModel(key: currency, rate: transferRate)
+            completion(base, destination)
+            return
+        }
+        completion(base, nil)
     }
 }
 
 
-// MARK: - private
+// MARK: - Private
 
 private extension HomeInteractor {
     
@@ -109,5 +106,4 @@ private extension HomeInteractor {
             self.currency = CurrencyViewModel(base: baseCode, timestamp: timeStamp, rates: rates)
         }
     }
-    
 }

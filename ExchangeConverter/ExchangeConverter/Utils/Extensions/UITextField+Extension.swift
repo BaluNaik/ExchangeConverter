@@ -21,6 +21,13 @@ extension UITextField {
     func loadDropdownData(data: [String], selectionHandler:@escaping (String) -> Void) {
         self.inputView = CurrencyPickerView(pickerData: data, dropdownField: self, selectionHandler: selectionHandler)
     }
+    
+    func isValidData() -> Bool {
+        guard let text = self.text else {
+            return false
+        }
+        return !text.isEmpty
+    }
 }
 
 

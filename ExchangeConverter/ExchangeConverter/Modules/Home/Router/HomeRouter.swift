@@ -9,6 +9,8 @@ import Foundation
 
 protocol HomeRouterInput {
     
+    func showDetailsScreen(amount: Int, source: RateViewModel, taget: RateViewModel)
+    
 }
 
 class HomeRouter: BaseModuleRouter, HomeRouterInput  {
@@ -19,6 +21,12 @@ class HomeRouter: BaseModuleRouter, HomeRouterInput  {
     required init(handler: HomeViewController) {
         self.transitionHandler = handler
     }
+    
+    func showDetailsScreen(amount: Int, source: RateViewModel, taget: RateViewModel) {
+        let detailsVc = DetailsAssembly.viewModule(amount: amount, source: source, target: taget)
+        self.transitionHandler?.pushModuleInterface(controller: detailsVc, animated: true)
+    }
+    
 }
 
 

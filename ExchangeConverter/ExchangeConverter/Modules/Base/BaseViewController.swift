@@ -13,6 +13,9 @@ public protocol BaseModuleInterface {
     associatedtype Presenter
 }
 
+
+// MARK: - BaseViewController
+
 class BaseViewController: UIViewController {
     
     lazy var activityIndicator: ActivityIndicator = {
@@ -32,6 +35,24 @@ class BaseViewController: UIViewController {
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor(red: 0, green: 117/255, blue: 219/255, alpha: 0.8)
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+    }
+    
+    func applyConstraints(for button: UIButton) {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(button)
+        button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = UIColor.systemRed
+        button.setEnabled(enable: false)
+    }
 }
 
 extension UIViewController: ModuleTransition {

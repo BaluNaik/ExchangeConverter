@@ -2,7 +2,7 @@
 //  BaseCoreDataModel+CoreDataClass.swift
 //  ExchangeConverter
 //
-//  Created by Balu Naik on 1/27/23.
+//  Created by Balu Naik on 1/28/23.
 //
 //
 

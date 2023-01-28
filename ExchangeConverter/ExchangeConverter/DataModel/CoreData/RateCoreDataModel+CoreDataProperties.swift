@@ -2,7 +2,7 @@
 //  RateCoreDataModel+CoreDataProperties.swift
 //  ExchangeConverter
 //
-//  Created by Balu Naik on 1/27/23.
+//  Created by Balu Naik on 1/28/23.
 //
 //
 
@@ -18,6 +18,7 @@ extension RateCoreDataModel {
 
     @NSManaged public var currency: String?
     @NSManaged public var rate: Double
+    @NSManaged public var base: BaseCoreDataModel?
 
 }
 

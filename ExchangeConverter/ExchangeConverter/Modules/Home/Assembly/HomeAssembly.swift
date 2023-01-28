@@ -10,12 +10,14 @@ import UIKit
 class HomeAssembly {
     
     static var viewController: HomeViewController {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let vc = sb.instantiateViewController(withIdentifier: "Home") as! HomeViewController
+        let vc = HomeViewController()
         ModuleBuilder(root: vc)
         return vc
     }
 }
+
+
+// MARK: - Private
 
 private extension HomeAssembly {
     

@@ -10,27 +10,22 @@ import Foundation
 protocol HomePresenterInput: BaseModulePresenterInput {
     var currentBase: String? { get }
     
-    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ())
+    func eventLoadData(for base: String?,
+                         completion:@escaping (_ errorMsg: String?) -> ())
     func getCurrencyCodes(for type: CurrentTextField) -> [String]
-    func calculateAmount(amount: Int, currency: String) -> (from: String, to: String)
+    func calculateAmount(amount: Int, currency: String)
 }
 
 protocol HomePresenterOutput: BaseModulePresenterOutput {
-    
+    func showErrorAlert(errorMsg: String)
 }
 
 
-protocol HomePresenterInterface: BaseModulePresenter {
-    
-//    var offset: String? { set get }
-//    var feedService: NewsFeedService! { set get }
-//    var postService: PostService! { set get }
-//
-}
+// MARK: - HomePresenter
 
-class HomePresenter: HomePresenterInterface {
+class HomePresenter: BaseModulePresenter {
     
-    typealias UserInterface = BaseModulePresenterOutput
+    typealias UserInterface = HomePresenterOutput
     weak var userInterface: UserInterface?
     
     typealias Interactor = HomeInteractorInput
@@ -46,26 +41,35 @@ class HomePresenter: HomePresenterInterface {
 }
 
 
-extension HomePresenter: HomeInteractorOutput {
-    
-}
+// MARK: - HomeInteractorOutput
+
+extension HomePresenter: HomeInteractorOutput { }
+
+
+// MARK: - HomePresenterInput
 
 extension HomePresenter: HomePresenterInput {
     var currentBase: String? {
-        return self.interactor?.currentBase
+        return interactor?.currentBase
     }
     
-    func getCurrencyList(for base: String?, completion:@escaping (_ errorMsg: String?) -> ()) {
-        self.interactor?.getCurrencyList(for: base, completion: completion)
+    func eventLoadData(for base: String?, completion:@escaping (_ errorMsg: String?) -> ()) {
+        interactor?.eventLoadData(for: base, completion: completion)
     }
     
     func getCurrencyCodes(for type: CurrentTextField) -> [String] {
         
-        return self.interactor?.getCurrencyCodes(for: type) ?? []
+        return interactor?.getCurrencyCodes(for: type) ?? []
     }
     
-    func calculateAmount(amount: Int, currency: String) -> (from: String, to: String) {
-        return (self.interactor?.calculateAmount(amount: amount, currency: currency))!
+    func calculateAmount(amount: Int, currency: String) {
+        interactor?.getTransferDetails(for: currency, completion: { source, target in
+            if let target = target {
+                self.router?.showDetailsScreen(amount: amount, source: source, taget: target)
+            } else {
+                self.userInterface?.showErrorAlert(errorMsg: APIError.storageError.localizedDescription)
+            }
+        })
     }
     
 }
