@@ -16,6 +16,7 @@ class DetailsViewController: BaseViewController {
     var presenter: Presenter?
     var convertButton: UIButton?
     var secondsRemaining = 30
+    var timer: Timer?
     
     init(amount: Int, source: RateViewModel, target: RateViewModel) {
         self.source = source
@@ -46,6 +47,11 @@ class DetailsViewController: BaseViewController {
     func moveBack() {
         self.popModuleInterface(animated: true)
     }
+    
+    @objc func showSucessScreen() {
+        timer?.invalidate()
+        self.presenter?.showSucessScreen(total: String(format: "%.2f %@", getTranferAmount(), target.key), rate: String(format: "%.2f", target.rate))
+    }
 
 }
 
@@ -65,7 +71,7 @@ private extension DetailsViewController {
             applyConstraints(for: button)
             button.setTitle("CONVERT", for: .normal)
             button.setEnabled(enable: true)
-            //button.addTarget(self, action: #selector(showDetails), for: .touchUpInside)
+            button.addTarget(self, action: #selector(showSucessScreen), for: .touchUpInside)
         }
     }
     
@@ -118,8 +124,7 @@ private extension DetailsViewController {
         countDownLabel.textColor = UIColor.white
         countDownLabel.text = "30 Sec left"
         countDownLabel.textAlignment = .center
-        
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (Timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (Timer) in
                if self.secondsRemaining > 0 {
                    countDownLabel.text = "\(self.secondsRemaining) sec left"
                    self.secondsRemaining -= 1

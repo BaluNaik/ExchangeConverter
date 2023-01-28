@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol DetailsPresenterInput: BaseModulePresenterInput { }
+protocol DetailsPresenterInput: BaseModulePresenterInput {
+    func showSucessScreen(total: String, rate: String)
+}
 
 protocol DetailsPresenterOutput: BaseModulePresenterOutput { }
 
@@ -34,7 +36,11 @@ class DetailsPresenter: BaseModulePresenter {
 
 // MARK: - DetailsPresenterInput
 
-extension DetailsPresenter: DetailsPresenterInput { }
+extension DetailsPresenter: DetailsPresenterInput {
+    func showSucessScreen(total: String, rate: String) {
+        self.router?.showSucessScreen(total: total, rate: rate)
+    }
+}
 
 
 // MARK: - DetailsInteractorOutput

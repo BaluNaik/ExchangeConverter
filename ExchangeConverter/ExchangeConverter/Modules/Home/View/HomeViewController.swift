@@ -36,6 +36,8 @@ class HomeViewController: BaseViewController, BaseModuleInterface {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.destinationField?.text = ""
+        self.amountField?.text = ""
         self.eventLoadData(for: self.presenter?.currentBase ?? "USD")
     }
     

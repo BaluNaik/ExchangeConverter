@@ -48,6 +48,7 @@
 		A5C1A6A529851000001F4D05 /* DetailsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1A6A429851000001F4D05 /* DetailsAssembly.swift */; };
 		A5C1A6A7298559B5001F4D05 /* Double+Externsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1A6A6298559B5001F4D05 /* Double+Externsion.swift */; };
 		A5C1A6AA29856998001F4D05 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1A6A929856998001F4D05 /* ViewModel.swift */; };
+		A5C1A6AE298579CE001F4D05 /* SucessUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1A6AD298579CE001F4D05 /* SucessUIView.swift */; };
 		A5E16B02298400A90082E4D2 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B01298400A90082E4D2 /* CoreDataManager.swift */; };
 		A5E16B04298425E70082E4D2 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B03298425E70082E4D2 /* ActivityIndicator.swift */; };
 		A5E16B06298429260082E4D2 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E16B05298429260082E4D2 /* UIView+Extension.swift */; };
@@ -113,6 +114,7 @@
 		A5C1A6A429851000001F4D05 /* DetailsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsAssembly.swift; sourceTree = "<group>"; };
 		A5C1A6A6298559B5001F4D05 /* Double+Externsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Externsion.swift"; sourceTree = "<group>"; };
 		A5C1A6A929856998001F4D05 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		A5C1A6AD298579CE001F4D05 /* SucessUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SucessUIView.swift; sourceTree = "<group>"; };
 		A5E16B01298400A90082E4D2 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		A5E16B03298425E70082E4D2 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		A5E16B05298429260082E4D2 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 		A5A15E9629802A090016702F /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				A5C1A6AB298577A3001F4D05 /* Sucess */,
 				A5A15E9729802A1B0016702F /* Base */,
 				A5E16B122985087A0082E4D2 /* Details */,
 				A5A15EAD2980465D0016702F /* Home */,
@@ -377,6 +380,22 @@
 				A5C1A6A929856998001F4D05 /* ViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A5C1A6AB298577A3001F4D05 /* Sucess */ = {
+			isa = PBXGroup;
+			children = (
+				A5C1A6AC29857999001F4D05 /* UI */,
+			);
+			path = Sucess;
+			sourceTree = "<group>";
+		};
+		A5C1A6AC29857999001F4D05 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A5C1A6AD298579CE001F4D05 /* SucessUIView.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		A5E16B122985087A0082E4D2 /* Details */ = {
@@ -590,6 +609,7 @@
 				A576563B297EDBA100FEDC5A /* AppDelegate.swift in Sources */,
 				A5A215B229814A56008A469B /* HomeRouter.swift in Sources */,
 				A5C1A6A129850DA3001F4D05 /* DetailsInteractor.swift in Sources */,
+				A5C1A6AE298579CE001F4D05 /* SucessUIView.swift in Sources */,
 				A5E16B02298400A90082E4D2 /* CoreDataManager.swift in Sources */,
 				A5E16B06298429260082E4D2 /* UIView+Extension.swift in Sources */,
 				A5A215B02981494F008A469B /* HomePresenter.swift in Sources */,

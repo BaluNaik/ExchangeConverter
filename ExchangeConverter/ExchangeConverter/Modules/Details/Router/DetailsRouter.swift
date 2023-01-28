@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol DetailsRouterInput {
-    func showSucessScreen()
+    func showSucessScreen(total: String, rate: String)
 }
 
 class DetailsRouter: BaseModuleRouter, DetailsRouterInput  {
@@ -20,6 +21,12 @@ class DetailsRouter: BaseModuleRouter, DetailsRouterInput  {
         self.transitionHandler = handler
     }
     
-    func showSucessScreen() {}
+    func showSucessScreen(total: String, rate: String){
+        if let naviBar = self.transitionHandler?.navigationController {
+            let swiftUIViewController = UIHostingController(rootView: SucessUIView(navigationController: naviBar, rate: rate, totalAmount: total))
+            self.transitionHandler?.pushModuleInterface(controller: swiftUIViewController, animated: true)
+        }
+       
+    }
     
 }
