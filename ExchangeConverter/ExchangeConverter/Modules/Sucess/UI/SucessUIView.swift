@@ -38,6 +38,7 @@ struct SucessUIView: View {
         }
         .accentColor(.white)
         .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

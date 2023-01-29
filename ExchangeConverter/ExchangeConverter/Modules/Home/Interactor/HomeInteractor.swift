@@ -10,13 +10,13 @@ import Foundation
 protocol HomeInteractorInput: BaseModuleInteractorInput {
     var currentBase: String? { get }
     var currency: CurrencyViewModel? { set get }
+    var isExpried: Bool? { get }
     
     func getCurrencyCodes(for type: CurrentTextField) -> [String]
-    
     func eventLoadData(for base: String?,
                          completion:@escaping (_ errorMsg: String?) -> ())
     
-    func getTransferDetails(for currency: String, completion:@escaping (RateViewModel, RateViewModel?) -> ())
+    func getTransferDetails(for currency: String, amount: Int, completion:@escaping (PairConversionModel?, String?) -> ())
 }
 
 protocol HomeInteractorOutput: BaseModuleInteractorOutput { }
@@ -29,11 +29,21 @@ class HomeInteractor: BaseModuleInteractor {
     typealias Presenter = HomeInteractorOutput
     weak var presenter: Presenter?
     var currency: CurrencyViewModel?
-    private var connector: HomeConnectorInterface?
+    var connector: HomeConnectorInterface?
+    
+    init(){}
     
     required init(presenter: Presenter) {
         self.presenter = presenter
         connector = HomeConnector()
+    }
+    
+    func transform(_ response: CurrencyAPIModel) {
+        if let baseCode = response.base,
+           let timeStamp = response.timestamp,
+           let rates = response.rates {
+            self.currency = CurrencyViewModel(base: baseCode, timestamp: timeStamp, rates: rates)
+        }
     }
     
 }
@@ -47,14 +57,10 @@ extension HomeInteractor: HomeInteractorInput {
         return currency?.base
     }
     
+    var isExpried: Bool? { return currency?.isExpired() }
+    
     func eventLoadData(for base: String?, completion: @escaping (String?) -> ()) {
-        /*
-          * Check local storage availability
-          * If local storage not expired
-          * Load from local storage
-          * else make network request
-         */
-        self.connector?.getCurrencyList(for: base ?? "USD", completion: {[weak self] result in
+        self.connector?.getCurrencyList(for: base ?? "USD", completion: { [weak self] result in
             switch result {
             case .success(let success):
                 self?.transform(success)
@@ -83,27 +89,28 @@ extension HomeInteractor: HomeInteractorInput {
         return []
     }
     
-    func getTransferDetails(for currency: String, completion:@escaping (RateViewModel, RateViewModel?) -> ()) {
-        let base = RateViewModel(key: currentBase ?? "USD", rate: 1.0)
-        if let transferRate = self.currency?.rates[currency], transferRate > 0.0 {
-            let destination = RateViewModel(key: currency, rate: transferRate)
-            completion(base, destination)
-            return
-        }
-        completion(base, nil)
-    }
-}
-
-
-// MARK: - Private
-
-private extension HomeInteractor {
-    
-    func transform(_ response: CurrencyAPIModel) {
-        if let baseCode = response.base,
-           let timeStamp = response.timestamp,
-           let rates = response.rates {
-            self.currency = CurrencyViewModel(base: baseCode, timestamp: timeStamp, rates: rates)
-        }
+    func getTransferDetails(for currency: String, amount: Int, completion:@escaping (PairConversionModel?, String?) -> ()) {
+        self.connector?.getLocalConversion(for: PairConversionModel(base: currentBase ?? "USD", target: currency), completion: {[weak self] result in
+            switch result {
+            case .success(let data):
+                var finalData = data
+                finalData.amount = amount
+                finalData.totalAmount = (data.conversionRate! * Double(amount)).roundToDecimal(2)
+                completion(finalData, nil)
+            case .failure(_):
+                var pair = PairConversionModel(base: self?.currentBase ?? "USD", target: currency)
+                pair.amount = amount
+                self?.connector?.getPairConversion(for:pair, completion: { result in
+                    switch result {
+                    case .success(let model):
+                        var finalData = model
+                        finalData.amount = amount
+                        completion(finalData, nil)
+                    case .failure(let error):
+                        completion(nil, error.localizedDescription)
+                    }
+                })
+            }
+        })
     }
 }

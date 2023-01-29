@@ -31,6 +31,7 @@ class CoredataManager {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
         return container
     }()
     
@@ -48,7 +49,7 @@ class CoredataManager {
         }
     }
     
-    func fetchObjects<T: NSManagedObject>(attributes:[AnyHashable:Any], inputType:T.Type) -> [T]? {
+    func fetchObjects(attributes: [AnyHashable:Any]) -> PairConversion? {
         var predicates = [NSPredicate]()
         for (key,value) in attributes {
             let newPredicate = NSPredicate(format: "%K = %@", argumentArray: [key,value])
@@ -56,15 +57,69 @@ class CoredataManager {
         }
         
         let comoundPredicate = NSCompoundPredicate(type: .and, subpredicates: predicates)
-        let fetchRequest: NSFetchRequest<T> = NSFetchRequest(entityName: T.entityName)
+        let fetchRequest: NSFetchRequest<PairConversion> = PairConversion.fetchRequest()
         fetchRequest.predicate = comoundPredicate
         do {
             let result = try self.context.fetch(fetchRequest)
-            return result
-            
+            return result.first
         } catch {
             print(error)
             return nil
         }
+    }
+    
+    
+//    func fetchObjects<T: NSManagedObject>(attributes:[AnyHashable:Any], inputType:T.Type) -> [T]? {
+//        var predicates = [NSPredicate]()
+//        for (key,value) in attributes {
+//            let newPredicate = NSPredicate(format: "%K = %@", argumentArray: [key,value])
+//            predicates.append(newPredicate)
+//        }
+//
+//        let comoundPredicate = NSCompoundPredicate(type: .and, subpredicates: predicates)
+//        let fetchRequest: NSFetchRequest<T> = NSFetchRequest(entityName: T.entityName)
+//        fetchRequest.predicate = comoundPredicate
+//        do {
+//            let result = try self.context.fetch(fetchRequest)
+//            return result
+//
+//        } catch {
+//            print(error)
+//            return nil
+//        }
+//    }
+    
+    func getConversionDetails(for model: PairConversionModel) -> PairConversion? {
+        guard let model = CoredataManager.shared.fetchObjects(attributes: ["baseCode": model.base!,
+                                                                           "targetCode": model.target!]) else {
+            return nil
+        }
+        return model
+    }
+    
+    func saveData(response: PairConversionModel) {
+        if let baseCode = response.base,
+           let target = response.target,
+            let currency = CoredataManager.shared.fetchObjects(attributes: ["baseCode": baseCode, "targetCode": target]) {
+            currency.baseCode = baseCode
+            currency.targetCode = target
+            if let timestamp = response.timestamp {
+                currency.timeStamp = timestamp
+            }
+            if let conversionRate = response.conversionRate {
+                currency.conversionRate = conversionRate
+            }
+        } else {
+            let currency = PairConversion(context: CoredataManager.shared.context)
+            currency.baseCode = response.base
+            currency.targetCode = response.target
+            if let timestamp = response.timestamp {
+                currency.timeStamp = timestamp
+            }
+            if let conversionRate = response.conversionRate {
+                currency.conversionRate = conversionRate
+            }
+        }
+        CoredataManager.shared.saveContext()
     }
 }

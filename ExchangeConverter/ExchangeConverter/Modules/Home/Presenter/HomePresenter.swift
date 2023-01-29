@@ -9,6 +9,7 @@ import Foundation
 
 protocol HomePresenterInput: BaseModulePresenterInput {
     var currentBase: String? { get }
+    var isExpried: Bool? { get }
     
     func eventLoadData(for base: String?,
                          completion:@escaping (_ errorMsg: String?) -> ())
@@ -34,6 +35,8 @@ class HomePresenter: BaseModulePresenter {
     typealias Router = HomeRouterInput
     var router: Router?
     
+    init() { }
+    
     required init(userInterface: UserInterface) {
         self.userInterface = userInterface
     }
@@ -49,6 +52,8 @@ extension HomePresenter: HomeInteractorOutput { }
 // MARK: - HomePresenterInput
 
 extension HomePresenter: HomePresenterInput {
+    var isExpried: Bool? { return interactor?.isExpried }
+    
     var currentBase: String? {
         return interactor?.currentBase
     }
@@ -63,11 +68,13 @@ extension HomePresenter: HomePresenterInput {
     }
     
     func calculateAmount(amount: Int, currency: String) {
-        interactor?.getTransferDetails(for: currency, completion: { source, target in
-            if let target = target {
-                self.router?.showDetailsScreen(amount: amount, source: source, taget: target)
-            } else {
-                self.userInterface?.showErrorAlert(errorMsg: APIError.storageError.localizedDescription)
+        interactor?.getTransferDetails(for: currency, amount: amount, completion: { conversionModel, errorMsg in
+            DispatchQueue.main.async {
+                if let errorMsg = errorMsg {
+                    self.userInterface?.showErrorAlert(errorMsg: errorMsg)
+                } else if let data = conversionModel {
+                    self.router?.showDetailsScreen(conversionModel: data)
+                }
             }
         })
     }

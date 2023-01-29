@@ -19,9 +19,10 @@ struct CurrencyAPIModel: Codable {
         case rates = "conversion_rates"
     }
     
-    init(base: String, timestamp: Double) {
+    init(base: String, timestamp: Double, rates: [String: Double]? = nil) {
         self.base = base
         self.timestamp = timestamp
+        self.rates = rates
     }
     
     init(from decoder: Decoder) throws {
@@ -30,13 +31,7 @@ struct CurrencyAPIModel: Codable {
             base = baseCode
         }
         if let serverTime = try values.decodeIfPresent(Double.self, forKey: .timestamp) {
-            /*
-             * Keep next update time frame for 5hr
-             * If server next update time < 5hr? Keep server time
-             * If server next update time > 5hr? make next update time with 5hr frame
-             */
-            let nextTimeStamp = Double(Int(Date().timeIntervalSince1970) + 18000)
-            self.timestamp = serverTime > nextTimeStamp ? nextTimeStamp : serverTime
+            self.timestamp = serverTime
         }
         if let rates = try values.decodeIfPresent([String: Double].self, forKey: .rates) {
             self.rates = rates

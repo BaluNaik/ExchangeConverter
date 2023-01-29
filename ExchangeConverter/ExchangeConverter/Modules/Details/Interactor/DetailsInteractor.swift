@@ -20,7 +20,6 @@ class DetailsInteractor: BaseModuleInteractor {
     required init(presenter: Presenter) {
         self.presenter = presenter
     }
-    
 }
 
 

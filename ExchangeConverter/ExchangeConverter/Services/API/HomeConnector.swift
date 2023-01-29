@@ -11,23 +11,35 @@ protocol HomeConnectorInterface: AnyObject {
     
     func getCurrencyList(for currency: String,
                          completion: @escaping (Result<CurrencyAPIModel, APIError>) -> ())
+    
+    func getPairConversion(for pair: PairConversionModel,
+                         completion: @escaping (Result<PairConversionModel, APIError>) -> ())
+    
+    
+    func getLocalConversion(for pair: PairConversionModel, completion: @escaping (Result<PairConversionModel, APIError>) -> ())
 
 }
 
 class HomeConnector: HomeConnectorInterface {
-    init() {}
     
     private let url = "https://v6.exchangerate-api.com/v6/"
     private let appId = "b5362afa80af8bfe92f310ef"
     
-    func getCurrencyList(for currency: String, completion: @escaping (Result<CurrencyAPIModel, APIError>) -> ()) {
-        if let localCurrency = self.getStorageList(for: currency) {
-            completion(.success(localCurrency))
+    init() {}
+    
+    func getLocalConversion(for pair: PairConversionModel, completion: @escaping (Result<PairConversionModel, APIError>) -> ()) {
+        if let localData = self.getLocalConversion(for: pair) {
+            completion(.success(localData))
             return
+        } else {
+            completion(.failure(APIError.storageError))
         }
+    }
+    
+    func getCurrencyList(for currency: String, completion: @escaping (Result<CurrencyAPIModel, APIError>) -> ()) {
         let urlString = "\(url)\(appId)/latest/\(currency)"
         if let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: URLRequest(url: url)) {[weak self] data, response, error in
+            URLSession.shared.dataTask(with: URLRequest(url: url)) {(data, response, error) in
                 if let error = error as? URLError {
                     let urlError = APIError.url(error)
                     completion(.failure(urlError))
@@ -38,6 +50,33 @@ class HomeConnector: HomeConnectorInterface {
                 } else if let data = data {
                     do {
                         let response = try JSONDecoder().decode(CurrencyAPIModel.self, from: data)
+                        completion(.success(response))
+                    } catch {
+                        let error =  APIError.parsing(error as? DecodingError)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    func getPairConversion(for pair: PairConversionModel,
+                         completion: @escaping (Result<PairConversionModel, APIError>) -> ()) {
+        let fromCode = pair.base!, toCode = pair.target!
+        let amount = pair.amount!
+        let urlString = "\(url)\(appId)/pair/\(fromCode)/\(toCode)/\(amount)"
+        if let url = URL(string: urlString) {
+            URLSession.shared.dataTask(with: URLRequest(url: url)) {[weak self]  data, response, error in
+                if let error = error as? URLError {
+                    let urlError = APIError.url(error)
+                    completion(.failure(urlError))
+                    return
+                } else if let response = response as? HTTPURLResponse,
+                          !(200...299).contains(response.statusCode) {
+                    completion(.failure(APIError.badResponse(statusCode: response.statusCode)))
+                } else if let data = data {
+                    do {
+                        let response = try JSONDecoder().decode(PairConversionModel.self, from: data)
                         self?.saveData(response: response)
                         completion(.success(response))
                     } catch {
@@ -55,54 +94,17 @@ class HomeConnector: HomeConnectorInterface {
 
 private extension HomeConnector {
     
-    func getStorageList(for currency:String) -> CurrencyAPIModel? {
-        if let item = CoredataManager.shared.fetchObjects(attributes: ["base" : currency], inputType: BaseCoreDataModel.self)?.first {
+    func getLocalConversion(for pair: PairConversionModel) -> PairConversionModel? {
+        if let item = CoredataManager.shared.getConversionDetails(for: pair) {
             let expireDate = Date(timeIntervalSince1970: item.timeStamp)
-            if expireDate > Date(),
-               let baseCode = item.base {
-                var model = CurrencyAPIModel(base: baseCode, timestamp: item.timeStamp)
-                if let rates = item.rates as? Set<RateCoreDataModel> {
-                    model.rates =  Dictionary(uniqueKeysWithValues: rates.map{ ($0.currency ?? "", $0.rate ) })
-                }
-                return model
+            if expireDate > Date() {
+                return PairConversionModel(from: item)
             }
         }
         return nil
     }
     
-    func saveData(response: CurrencyAPIModel) {
-        if let baseCode = response.base,
-           let currency = CoredataManager.shared.fetchObjects(attributes: ["base": baseCode], inputType: BaseCoreDataModel.self)?.first {
-            currency.base = response.base
-            if let timestamp = response.timestamp {
-                currency.timeStamp = timestamp
-            }
-            currency.rates = nil
-            for item in response.rates ?? [:] {
-                if let rateCoredataModel = CoredataManager.shared.fetchObjects(attributes: ["currency" : item.key], inputType: RateCoreDataModel.self)?.first  {
-                    rateCoredataModel.currency = item.key
-                    rateCoredataModel.rate = item.value
-                    currency.addToRates(rateCoredataModel)
-                } else {
-                    let rateCoredataModel = RateCoreDataModel(context: CoredataManager.shared.context)
-                    rateCoredataModel.currency = item.key
-                    rateCoredataModel.rate = item.value
-                    currency.addToRates(rateCoredataModel)
-                }
-            }
-        } else {
-            let currency = BaseCoreDataModel(context: CoredataManager.shared.context)
-            currency.base = response.base
-            if let timestamp = response.timestamp {
-                currency.timeStamp = timestamp
-            }
-            for item in response.rates ?? [:] {
-                let rateCoredataModel = RateCoreDataModel(context: CoredataManager.shared.context)
-                rateCoredataModel.currency = item.key
-                rateCoredataModel.rate = item.value
-                currency.addToRates(rateCoredataModel)
-            }
-        }
-        CoredataManager.shared.saveContext()
+    func saveData(response: PairConversionModel) {
+        CoredataManager.shared.saveData(response: response)
     }
 }

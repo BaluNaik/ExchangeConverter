@@ -9,8 +9,8 @@ import UIKit
 
 class DetailsAssembly {
     
-    static func viewModule(amount: Int, source: RateViewModel, target: RateViewModel) -> DetailsViewController {
-        let vc = DetailsViewController(amount: amount, source: source, target: target)
+    static func viewModule(conversionModel: PairConversionModel) -> DetailsViewController {
+        let vc = DetailsViewController(conversionModel: conversionModel)
         ModuleBuilder(root: vc)
         return vc
     }
@@ -31,5 +31,4 @@ private extension DetailsAssembly {
         presenter.router = router
         root.presenter = presenter
     }
-    
 }

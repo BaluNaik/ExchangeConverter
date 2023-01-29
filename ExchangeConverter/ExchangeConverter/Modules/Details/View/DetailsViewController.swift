@@ -8,9 +8,7 @@
 import UIKit
 
 class DetailsViewController: BaseViewController {
-    private var source: RateViewModel
-    private var target: RateViewModel
-    private var amount: Double
+    private var conversionModel: PairConversionModel?
     
     typealias Presenter = DetailsPresenterInput
     var presenter: Presenter?
@@ -18,10 +16,8 @@ class DetailsViewController: BaseViewController {
     var secondsRemaining = 30
     var timer: Timer?
     
-    init(amount: Int, source: RateViewModel, target: RateViewModel) {
-        self.source = source
-        self.target = target
-        self.amount = Double(amount).roundToDecimal(2)
+    init(conversionModel: PairConversionModel) {
+        self.conversionModel = conversionModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,7 +46,9 @@ class DetailsViewController: BaseViewController {
     
     @objc func showSucessScreen() {
         timer?.invalidate()
-        self.presenter?.showSucessScreen(total: String(format: "%.2f %@", getTranferAmount(), target.key), rate: String(format: "%.2f", target.rate))
+        let text1 = String(format: "%.2f %@",(conversionModel?.totalAmount ?? 0.0).roundToDecimal(2), conversionModel?.target ?? "")
+        let text2 = String(format: "%.2f", conversionModel?.conversionRate?.roundToDecimal(2) ?? 0)
+        self.presenter?.showSucessScreen(total: text1, rate: text2)
     }
 
 }
@@ -86,7 +84,7 @@ private extension DetailsViewController {
         fromlLable.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50).isActive = true
         fromlLable.font = UIFont.boldSystemFont(ofSize: 18)
         fromlLable.textColor = UIColor.white
-        fromlLable.text = String(format: "%.2f %@", amount, source.key)
+        fromlLable.text = String(format: "%d %@", conversionModel?.amount ?? 0, conversionModel?.base ?? "USD")
         fromlLable.textAlignment = .center
         
         let precedesLable = UILabel()
@@ -110,7 +108,7 @@ private extension DetailsViewController {
         toLable.topAnchor.constraint(equalTo: precedesLable.bottomAnchor).isActive = true
         toLable.font = UIFont.boldSystemFont(ofSize: 18)
         toLable.textColor = UIColor.white
-        toLable.text = String(format: "%.2f %@", getTranferAmount(), target.key)
+        toLable.text = String(format: "%.2f %@", conversionModel?.totalAmount?.roundToDecimal(2) ?? 0, conversionModel?.target ?? "")
         toLable.textAlignment = .center
         
         let countDownLabel = UILabel()
@@ -133,9 +131,5 @@ private extension DetailsViewController {
                    self.showExpiredAlert()
                }
            }
-    }
-    
-    func getTranferAmount() -> Double {
-        return (amount * Double(target.rate)).roundToDecimal(2)
     }
 }

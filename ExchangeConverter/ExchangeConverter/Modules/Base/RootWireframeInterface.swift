@@ -8,7 +8,5 @@
 import UIKit
 
 protocol RootWireframeInterface {
-    
     func attachRootViewControllerInWindow(_ window: UIWindow)
-    //func showRoot(with viewController: UIViewController, in window: UIWindow)
 }

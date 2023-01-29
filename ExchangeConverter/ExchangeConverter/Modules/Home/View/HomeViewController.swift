@@ -34,11 +34,20 @@ class HomeViewController: BaseViewController, BaseModuleInterface {
         configTextFields()
     }
     
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.destinationField?.text = ""
         self.amountField?.text = ""
-        self.eventLoadData(for: self.presenter?.currentBase ?? "USD")
+        self.validateAmount()
+        if presenter?.isExpried ?? true {
+            self.eventLoadData(for: self.presenter?.currentBase ?? "USD")
+        }
     }
     
     func salutations_onSelect(selectedText: String) {

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="BaseCoreDataModel" representedClassName="BaseCoreDataModel" syncable="YES">
-        <attribute name="base" optional="YES" attributeType="String"/>
+    <entity name="PairConversion" representedClassName="PairConversion" syncable="YES">
+        <attribute name="baseCode" optional="YES" attributeType="String"/>
+        <attribute name="conversionRate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="targetCode" optional="YES" attributeType="String"/>
         <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="rates" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RateCoreDataModel" inverseName="base" inverseEntity="RateCoreDataModel"/>
-    </entity>
-    <entity name="RateCoreDataModel" representedClassName="RateCoreDataModel" syncable="YES">
-        <attribute name="currency" optional="YES" attributeType="String"/>
-        <attribute name="rate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="base" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BaseCoreDataModel" inverseName="rates" inverseEntity="BaseCoreDataModel"/>
     </entity>
 </model>
