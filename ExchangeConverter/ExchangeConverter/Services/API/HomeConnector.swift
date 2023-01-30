@@ -39,52 +39,31 @@ class HomeConnector: HomeConnectorInterface {
     func getCurrencyList(for currency: String, completion: @escaping (Result<CurrencyAPIModel, APIError>) -> ()) {
         let urlString = "\(url)\(appId)/latest/\(currency)"
         if let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: URLRequest(url: url)) {(data, response, error) in
-                if let error = error as? URLError {
-                    let urlError = APIError.url(error)
-                    completion(.failure(urlError))
-                    return
-                } else if let response = response as? HTTPURLResponse,
-                          !(200...299).contains(response.statusCode) {
-                    completion(.failure(APIError.badResponse(statusCode: response.statusCode)))
-                } else if let data = data {
-                    do {
-                        let response = try JSONDecoder().decode(CurrencyAPIModel.self, from: data)
-                        completion(.success(response))
-                    } catch {
-                        let error =  APIError.parsing(error as? DecodingError)
-                        completion(.failure(error))
-                    }
+            self.DataTask(url: url, inputType: CurrencyAPIModel.self) { result in
+                switch result {
+                case .success(let model):
+                    completion(.success(model))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            }.resume()
+            }
         }
     }
     
     func getPairConversion(for pair: PairConversionModel,
-                         completion: @escaping (Result<PairConversionModel, APIError>) -> ()) {
+                           completion: @escaping (Result<PairConversionModel, APIError>) -> ()) {
         let fromCode = pair.base!, toCode = pair.target!
         let amount = pair.amount!
         let urlString = "\(url)\(appId)/pair/\(fromCode)/\(toCode)/\(amount)"
         if let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: URLRequest(url: url)) {[weak self]  data, response, error in
-                if let error = error as? URLError {
-                    let urlError = APIError.url(error)
-                    completion(.failure(urlError))
-                    return
-                } else if let response = response as? HTTPURLResponse,
-                          !(200...299).contains(response.statusCode) {
-                    completion(.failure(APIError.badResponse(statusCode: response.statusCode)))
-                } else if let data = data {
-                    do {
-                        let response = try JSONDecoder().decode(PairConversionModel.self, from: data)
-                        self?.saveData(response: response)
-                        completion(.success(response))
-                    } catch {
-                        let error =  APIError.parsing(error as? DecodingError)
-                        completion(.failure(error))
-                    }
+            self.DataTask(url: url, inputType: PairConversionModel.self) { result in
+                switch result {
+                case .success(let model):
+                    completion(.success(model))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            }.resume()
+            }
         }
     }
 }
@@ -106,5 +85,41 @@ private extension HomeConnector {
     
     func saveData(response: PairConversionModel) {
         CoredataManager.shared.saveData(response: response)
+    }
+    
+    func convertToArray<T>(_ element: T) -> [T] {
+        return [element]
+    }
+    
+    func DataTask<T: Decodable>(url: URL, inputType: T.Type, completion: @escaping (Result<T, APIError>) -> ()) {
+        URLSession.shared.dataTask(with: URLRequest(url: url)) {(data, response, error) in
+            if let error = error as? URLError {
+                let urlError = APIError.url(error)
+                completion(.failure(urlError))
+                return
+            } else if let response = response as? HTTPURLResponse,
+                      !(200...299).contains(response.statusCode) {
+                completion(.failure(APIError.badResponse(statusCode: response.statusCode)))
+            } else if let data = data,
+                      let response = CodableParser.parse(data, type: T.self) {
+                completion(.success(response))
+            } else {
+                let error =  APIError.parsing(error as? DecodingError)
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+}
+
+
+// MARK: - Generics Parser
+
+class CodableParser {
+    class func parse<T: Decodable>(_ data: Data, type: T.Type) -> T? {
+        var decodedData: T?
+        decodedData = try? JSONDecoder().decode(T.self, from: data)
+
+        return decodedData
     }
 }
